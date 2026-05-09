@@ -320,14 +320,7 @@ jobs:
         type:
           # if running in a PR build with coverage
           - ${{ (github.event_name != 'release' && github.ref != 'refs/heads/develop') && 'coverage' || 'production' }}
-        include:
-          # if not, build with coverage for tests
-          - arch: amd64
-            service: [rocketchat]
-            type: coverage
-          - arch: arm64
-            service: [rocketchat]
-            type: coverage
+        include: ${{ (github.event_name == 'release' || github.ref == 'refs/heads/develop') && fromJSON('[{"arch":"amd64","service":["rocketchat"],"type":"coverage"},{"arch":"arm64","service":["rocketchat"],"type":"coverage"}]') || fromJSON('[]') }}
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

@@ -134,12 +134,14 @@ runs:
       run: meteor reset
 
     - name: Restore packages build
+      if: steps.cache-build.outputs.cache-hit != 'true'
       uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
       with:
         name: packages-build
         path: /tmp
 
     - name: Unpack packages build
+      if: steps.cache-build.outputs.cache-hit != 'true'
       shell: bash
       run: |
         tar -xzf /tmp/RocketChat-packages-build.tar.gz -C .
